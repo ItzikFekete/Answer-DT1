@@ -1,0 +1,41 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Answer Digital Test</title>
+</head>
+<body>
+    <div>
+        <h2>People</h2>
+        <ul id="products"></ul>
+    </div>
+    <div>
+        <h2>Search by ID</h2>
+        <input type="text" id="prodId" size="5" />
+        <input type="button" value="Search" onclick="find();" />
+        <p id="product" />
+    </div>
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
+    <script>
+        var uri = 'api/products';
+        $(document).ready(function () {
+            $.getJson(uri).done(function (data) {
+                $.each(data, function (key, item) {
+                    $('<li>', { text: formatItem(item) }).appendTo($('#products'));
+                });
+            });
+        });
+        function formatItem(item) {
+            return item.FirstName + ':$' + item.LastName + ':$' + item.IsAuthorised + ':$' + item.CoulorID + ':$' + item.CoulorName;
+        }
+        function find() {
+            var id = $('#prodId').val();
+            $.getJson(uri + '/' + id).done(function (data) {
+                $('#product').text(formatItem(data));
+            }).fail(function (jqXHR, textStatus, err) {
+                $('#product').text('Error:' + err);
+            })
+        }
+
+    </script>
+</body >
+</html >
